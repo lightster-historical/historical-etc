@@ -1,0 +1,14 @@
+#!/bin/bash
+
+SSH_LOGIN=$1
+
+DB_USER=$2
+DB_PASSWORD=$3
+DB_DATABASE=$4
+
+LOCAL_FILE=$5
+REMOTE_FILE=$6
+
+ssh ${SSH_LOGIN} "mysqldump -u ${DB_USER} -p${DB_PASSWORD} ${DB_DATABASE} | gzip > ${REMOTE_FILE}"
+scp ${SSH_LOGIN}:${REMOTE_FILE} ${LOCAL_FILE}
+

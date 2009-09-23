@@ -1,0 +1,49 @@
+#!/bin/bash
+
+DB_DATABASE=$1
+
+SSH_LOGIN="litesign@lightdatasys.com"
+
+DB_USER="litesign_backup"
+DB_PASSWORD=""
+
+
+YEAR=`date +"%Y"`
+DAY_OF_WEEK=`date +"%a"`
+DATE=`date +"%y%m%d%H%M"`
+WEEK=`date +"%U"`
+MONTH=`date +"%m"`
+
+
+REMOTE_DIR="/home/litesign/etc/backup/database/com/${DB_DATABASE}"
+LOCAL_DIR="/Users/lightster/etc/backup/database/com/${DB_DATABASE}"
+LOCAL_TMP_DIR="${LOCAL_DIR}/tmp"
+LOCAL_DAILY_DIR="${LOCAL_DIR}/daily"
+LOCAL_WEEKLY_DIR="${LOCAL_DIR}/weekly/${YEAR}"
+LOCAL_MONTHLY_DIR="${LOCAL_DIR}/monthly/${YEAR}"
+
+REMOTE_FILE="${REMOTE_DIR}/${DB_DATABASE}-${DAY_OF_WEEK}-com.sql.gz"
+LOCAL_TMP_FILE="${LOCAL_TMP_DIR}/${DB_DATABASE}-${DATE}-com.sql.gz"
+LOCAL_DAILY_FILE="${LOCAL_DAILY_DIR}/${DB_DATABASE}-${DAY_OF_WEEK}-com.sql.gz"
+LOCAL_WEEKLY_FILE="${LOCAL_WEEKLY_DIR}/${DB_DATABASE}-${WEEK}-com.sql.gz"
+LOCAL_MONTHLY_FILE="${LOCAL_MONTHLY_DIR}/${DB_DATABASE}-${MONTH}-com.sql.gz"
+
+
+
+if [ ! -d "${LOCAL_DIR}" ]; then
+    mkdir -p "${LOCAL_TMP_DIR}"
+    mkdir -p "${LOCAL_DAILY_DIR}"
+    mkdir -p "${LOCAL_WEEKLY_DIR}"
+    mkdir -p "${LOCAL_MONTHLY_DIR}"
+fi
+
+
+
+./etc/scripts/download-remote-database "${SSH_LOGIN}" "${DB_USER}" "${DB_PASSWORD}" "${DB_DATABASE}" "${LOCAL_TMP_FILE}" "${REMOTE_FILE}"
+
+
+
+cp "${LOCAL_TMP_FILE}" "${LOCAL_DAILY_FILE}"
+cp "${LOCAL_TMP_FILE}" "${LOCAL_WEEKLY_FILE}"
+cp "${LOCAL_TMP_FILE}" "${LOCAL_MONTHLY_FILE}"
+

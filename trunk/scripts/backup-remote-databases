@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./etc/scripts/backup-remote-database litesign_alpha2
