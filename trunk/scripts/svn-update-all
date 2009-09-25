@@ -1,0 +1,13 @@
+root="/home/litesign"
+
+repos[0]="${root}/com/mephex"
+repos[1]="${root}/com/mephex/external"
+repos[2]="${root}/com/lightdatasys"
+repos[3]="${root}/etc"
+
+for index in 0 1 2 3
+do
+    echo "Updating ${repos[$index]}"
+    svn update ${repos[$index]}
+done
+
