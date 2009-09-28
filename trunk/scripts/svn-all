@@ -1,0 +1,17 @@
+if [ "$1" = "update" ]; then
+    msg="Updating"
+elif [ "$1" = "status" ]; then
+    msg="Checking status of"
+else
+    echo "Invalid SVN command provided"
+    exit 1
+fi
+
+source ./etc/scripts/svn-repos
+
+for repo in ${repos[@]}
+do
+    echo "${msg} ${repo}"
+    svn $1 ${repo} $2
+done
+
